@@ -1,5 +1,6 @@
 package com.nebula.Nebula.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,4 +27,8 @@ public class Heading {
     @OneToMany(mappedBy = "heading", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Topics> topics;
 
+    @ManyToOne
+    @JoinColumn(name = "tutorial_id")
+    @JsonIgnore
+    private Tutorial tutorial;
 }

@@ -7,31 +7,31 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "content")
+@Table(name = "resources")
 @Builder
-public class Content {
+public class Resources {
 
     @Id
     @GeneratedValue
     private UUID id;
 
-    private String contentHeading;
+    @Column(nullable = false)
+    private String name;
 
-    @Lob
-    private String content;
+    @Column(nullable = false)
+    private String url;
+
+    @Column(nullable = false)
+    private String type;
 
     @ManyToOne
-    @JoinColumn(name = "topics_id")
+    @JoinColumn(name = "content_id",nullable = false)
     @JsonIgnore
-    private Topics topics;
-
-    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL)
-    private List<Resources> resources;
+    private Content content;
 }
