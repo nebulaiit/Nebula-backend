@@ -29,6 +29,9 @@ public class Users implements UserDetails {
 
     private String lastName;
 
+    @Column(name = "user_id", unique = true, nullable = false)
+    private String userId;
+
     @JsonIgnore
     private String password;
 

@@ -2,6 +2,7 @@ package com.nebula.Nebula.controller;
 
 import com.nebula.Nebula.auth.dto.ResponseBodyDto;
 import com.nebula.Nebula.dto.HeadingDto;
+import com.nebula.Nebula.dto.TutorialDto;
 import com.nebula.Nebula.model.Heading;
 import com.nebula.Nebula.model.Tutorial;
 import com.nebula.Nebula.service.HeadingService;
@@ -28,13 +29,7 @@ public class HeadingController {
         return new ResponseEntity<>(headingDtos, HttpStatus.OK);
     }
 
-    @GetMapping("/tutorial/{tutorialName}")
-    public ResponseEntity<Tutorial> getTutorial(@PathVariable String tutorialName){
 
-        Tutorial tutorial = headingService.getTutorial(tutorialName);
-
-        return new ResponseEntity<>(tutorial, HttpStatus.OK);
-    }
 
     @PostMapping("/add-heading")
     public ResponseEntity<ResponseBodyDto> addHeadding(@RequestBody Heading heading){

@@ -1,20 +1,18 @@
-package com.nebula.Nebula.auth.dto;
+package com.nebula.Nebula.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserToken {
+@Builder
+public class TutorialDto {
 
-    private String token;
-    private String role;
-    private String userId;
-
-
-
+    private UUID id;
+    private String tutorialName;
 }

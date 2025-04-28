@@ -2,7 +2,9 @@ package com.nebula.Nebula.service;
 
 import com.nebula.Nebula.auth.dto.ResponseBodyDto;
 import com.nebula.Nebula.dto.HeadingDto;
+import com.nebula.Nebula.dto.TutorialDto;
 import com.nebula.Nebula.mapper.HeadingMapper;
+import com.nebula.Nebula.mapper.TutorialMapper;
 import com.nebula.Nebula.model.Heading;
 import com.nebula.Nebula.model.Tutorial;
 import com.nebula.Nebula.repository.HeadingRepo;
@@ -26,6 +28,9 @@ public class HeadingService {
     @Autowired
     private HeadingMapper headingMapper;
 
+
+
+
     public List<HeadingDto> getAllHeading() {
         List<Heading> headings = headingRepo.findAll();
 
@@ -45,8 +50,5 @@ public class HeadingService {
 
     }
 
-    public Tutorial getTutorial(String tutorialName) {
-        Tutorial tutorial = tutorialRepo.findByTutorialName(tutorialName);
-        return tutorial;
-    }
+
 }

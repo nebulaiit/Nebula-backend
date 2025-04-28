@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserToken {
+public class UserDto {
 
-    private String token;
+    private String firstName;
+    private String lastName;
+    private String email;
     private String role;
-    private String userId;
-
-
-
 }

@@ -1,10 +1,7 @@
 package com.nebula.Nebula.auth.controller;
 
 import com.nebula.Nebula.auth.config.JWTTokenHelper;
-import com.nebula.Nebula.auth.dto.LoginRequest;
-import com.nebula.Nebula.auth.dto.RegistrationRequest;
-import com.nebula.Nebula.auth.dto.ResponseBodyDto;
-import com.nebula.Nebula.auth.dto.UserToken;
+import com.nebula.Nebula.auth.dto.*;
 import com.nebula.Nebula.auth.entity.Authority;
 import com.nebula.Nebula.auth.entity.Users;
 import com.nebula.Nebula.auth.service.AuthorityService;
@@ -17,10 +14,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -82,6 +78,7 @@ public class UserController {
                 UserToken userToken = UserToken.builder()
                         .token(Token)
                         .role(role)
+                        .userId(users.getUserId())
                         .build();
 
                 return new ResponseEntity<>(userToken,HttpStatus.OK);
@@ -91,5 +88,21 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @GetMapping("/user-list")
+    public ResponseEntity<List<UserList>> getAllUser(){
+
+        List<UserList> userLists = userService.getAllUser();
+
+        return new ResponseEntity<>(userLists, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<UserDto> getUserDetails(@PathVariable String userId){
+        UserDto userDto = userService.getUserDetails(userId);
+
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 }
