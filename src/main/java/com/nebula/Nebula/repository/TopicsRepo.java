@@ -8,5 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TopicsRepo extends JpaRepository<Topics, UUID> {
-    List<Content> findByUrlSlug(String urlSlug);
+
+    Topics findByUrlSlug(String urlSlug);
 }

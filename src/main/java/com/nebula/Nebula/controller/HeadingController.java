@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -30,10 +31,9 @@ public class HeadingController {
     }
 
 
-
-    @PostMapping("/add-heading")
-    public ResponseEntity<ResponseBodyDto> addHeadding(@RequestBody Heading heading){
-        ResponseBodyDto responseBodyDto = headingService.addHeading(heading);
+    @PostMapping("/add-heading/{id}")
+    public ResponseEntity<ResponseBodyDto> addHeadding(@PathVariable UUID id,  @RequestBody Heading heading){
+        ResponseBodyDto responseBodyDto = headingService.addHeading(id, heading);
 
         return new ResponseEntity<>(responseBodyDto, HttpStatus.CREATED);
     }

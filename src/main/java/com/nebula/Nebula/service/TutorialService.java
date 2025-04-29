@@ -1,6 +1,7 @@
 package com.nebula.Nebula.service;
 
 
+import com.nebula.Nebula.auth.dto.ResponseBodyDto;
 import com.nebula.Nebula.dto.TutorialDto;
 import com.nebula.Nebula.mapper.TutorialMapper;
 import com.nebula.Nebula.model.Tutorial;
@@ -29,5 +30,22 @@ public class TutorialService {
         List<Tutorial> tutorial = tutorialRepo.findAll();
 
         return tutorial.stream().map(tutorialMapper::toDto).collect(Collectors.toList());
+    }
+
+    public ResponseBodyDto createTutorial(Tutorial tutorial) {
+
+        if (tutorial != null){
+            tutorialRepo.save(tutorial);
+
+            return ResponseBodyDto.builder()
+                    .code(201)
+                    .message("Tutorial Has Been Created")
+                    .build();
+        }
+
+        return ResponseBodyDto.builder()
+                .code(400)
+                .message("Error While Creating Tutorial")
+                .build();
     }
 }

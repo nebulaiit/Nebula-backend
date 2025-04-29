@@ -2,6 +2,7 @@ package com.nebula.Nebula.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -31,6 +32,7 @@ public class SecurityConfig {
 
     private static final String[] PUBLIC_APIS = {
             "/auth/**",
+//            "/api/tutorial/**"
 
     };
 
@@ -41,6 +43,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // ✅ CSRF Disabled for APIs
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_APIS).permitAll() // ✅ Public APIs allowed
+                        .requestMatchers(HttpMethod.GET, "/api/tutorial/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/tutorial").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/heading/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/heading").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/content/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/content").authenticated()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -67,7 +75,7 @@ public class SecurityConfig {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));// ✅ Allow frontend
+        config.setAllowedOrigins(List.of("https://nebula-admin-iota.vercel.app" , "https://nebula-main-site.vercel.app"));// ✅ Allow frontend
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

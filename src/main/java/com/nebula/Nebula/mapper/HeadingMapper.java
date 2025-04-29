@@ -23,6 +23,7 @@ public class HeadingMapper {
                 .collect(Collectors.toList());
 
         return HeadingDto.builder()
+                .id(heading.getId())
                 .headingName(heading.getHeadingName())
                 .topics(topicDTOs)
                 .build();

@@ -2,9 +2,7 @@ package com.nebula.Nebula.service;
 
 import com.nebula.Nebula.auth.dto.ResponseBodyDto;
 import com.nebula.Nebula.dto.HeadingDto;
-import com.nebula.Nebula.dto.TutorialDto;
 import com.nebula.Nebula.mapper.HeadingMapper;
-import com.nebula.Nebula.mapper.TutorialMapper;
 import com.nebula.Nebula.model.Heading;
 import com.nebula.Nebula.model.Tutorial;
 import com.nebula.Nebula.repository.HeadingRepo;
@@ -13,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,23 +30,25 @@ public class HeadingService {
 
 
 
-
     public List<HeadingDto> getAllHeading() {
         List<Heading> headings = headingRepo.findAll();
 
         return headings.stream().map(headingMapper::toDto).collect(Collectors.toList());
     }
 
-    public ResponseBodyDto addHeading(Heading heading) {
+    public ResponseBodyDto addHeading(UUID id, Heading heading) {
 
-        Heading heading1= headingRepo.findByHeadingName(heading.getHeadingName());
+        Tutorial tutorial = tutorialRepo.findById(id).orElse(null);
 
-        if (heading1 != null){
-            headingRepo.save(heading);
-            return ResponseBodyDto.builder().code(201).message("Heading has been Created").build();
-        }
+        Heading heading2 =  Heading.builder()
+                .headingName(heading.getHeadingName())
+                .tutorial(tutorial)
+                .build();
 
-        return ResponseBodyDto.builder().code(400).message("Error while adding Heading").build();
+
+        headingRepo.save(heading2);
+
+        return ResponseBodyDto.builder().code(201).message("Heading has been Created").build();
 
     }
 
