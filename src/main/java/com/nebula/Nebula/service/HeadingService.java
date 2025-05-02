@@ -1,6 +1,7 @@
 package com.nebula.Nebula.service;
 
 import com.nebula.Nebula.auth.dto.ResponseBodyDto;
+import com.nebula.Nebula.dto.HeadingDropDownDto;
 import com.nebula.Nebula.dto.HeadingDto;
 import com.nebula.Nebula.mapper.HeadingMapper;
 import com.nebula.Nebula.model.Heading;
@@ -36,6 +37,19 @@ public class HeadingService {
         return headings.stream().map(headingMapper::toDto).collect(Collectors.toList());
     }
 
+    public List<HeadingDropDownDto> getHeadingByTutorialId(UUID id) {
+
+        Tutorial tutorial = tutorialRepo.findById(id).orElse(null);
+        List<Heading> heading = tutorial.getHeading();
+        return heading.stream().map(headingMapper::toDropdownDto).collect(Collectors.toList());
+    }
+
+    public List<HeadingDto> getHeadingById(String tutorialName) {
+        Tutorial tutorial = tutorialRepo.findByTutorialName(tutorialName);
+        List<Heading> headings = tutorial.getHeading();
+        return headings.stream().map(headingMapper::toDto).collect(Collectors.toList());
+    }
+
     public ResponseBodyDto addHeading(UUID id, Heading heading) {
 
         Tutorial tutorial = tutorialRepo.findById(id).orElse(null);
@@ -51,6 +65,7 @@ public class HeadingService {
         return ResponseBodyDto.builder().code(201).message("Heading has been Created").build();
 
     }
+
 
 
 }

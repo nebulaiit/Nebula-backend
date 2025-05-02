@@ -1,5 +1,6 @@
 package com.nebula.Nebula.mapper;
 
+import com.nebula.Nebula.dto.HeadingDropDownDto;
 import com.nebula.Nebula.dto.HeadingDto;
 import com.nebula.Nebula.dto.TopicsDto;
 import com.nebula.Nebula.model.Heading;
@@ -19,7 +20,7 @@ public class HeadingMapper {
         }
 
         List<TopicsDto> topicDTOs = heading.getTopics().stream()
-                .map(topic -> new TopicsDto(topic.getTopicName()))
+                .map(topic -> new TopicsDto(topic.getTopicName(), topic.getUrlSlug()))
                 .collect(Collectors.toList());
 
         return HeadingDto.builder()
@@ -28,4 +29,21 @@ public class HeadingMapper {
                 .topics(topicDTOs)
                 .build();
     }
+    public HeadingDropDownDto toDropdownDto(Heading heading) {
+
+        if (heading == null) {
+            return null;
+        }
+
+        List<TopicsDto> topicDTOs = heading.getTopics().stream()
+                .map(topic -> new TopicsDto(topic.getTopicName(), topic.getUrlSlug()))
+                .collect(Collectors.toList());
+
+        return HeadingDropDownDto.builder()
+                .id(heading.getId())
+                .headingName(heading.getHeadingName())
+
+                .build();
+    }
+
 }

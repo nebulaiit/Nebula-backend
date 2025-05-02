@@ -75,7 +75,7 @@ public class SecurityConfig {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("https://nebula-admin-iota.vercel.app" , "https://nebula-main-site.vercel.app"));// ✅ Allow frontend
+        config.setAllowedOrigins(List.of("https://nebula-admin-iota.vercel.app" , "https://nebula-main-site.vercel.app" , "http://localhost:5173"));// ✅ Allow frontend
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

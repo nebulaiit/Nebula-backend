@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TopicsDto {
-    private String topicName;
-    private String urlSlug;
+public class HeadingDropDownDto {
+    private UUID id;
+    private String headingName;
 }
