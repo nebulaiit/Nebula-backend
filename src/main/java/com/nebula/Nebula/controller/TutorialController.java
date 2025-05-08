@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -44,5 +45,12 @@ public class TutorialController {
 
     }
 
+    @PutMapping("/tutorial/{id}")
+    public ResponseEntity<ResponseBodyDto> updatingTutorial(@PathVariable UUID id, @RequestBody Tutorial tutorial){
+
+        ResponseBodyDto responseBodyDto = tutorialService.updateTutorial(id,tutorial);
+
+        return new ResponseEntity<>(responseBodyDto, HttpStatus.CREATED);
+    }
 
 }

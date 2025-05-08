@@ -16,5 +16,5 @@ public class ContentBlockDTO {
     private UUID id;
     private String type;
     private String value;
-    private Map<String, Object> extra;
+
 }

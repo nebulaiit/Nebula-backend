@@ -28,5 +28,8 @@ public class Tutorial {
     @OneToMany(mappedBy = "tutorial", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Heading> heading;
 
+    @OneToOne(mappedBy = "tutorial", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private ReferenceContent referenceContent;
+
 
 }

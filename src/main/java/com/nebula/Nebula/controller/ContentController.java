@@ -4,6 +4,7 @@ import com.nebula.Nebula.auth.dto.ResponseBodyDto;
 import com.nebula.Nebula.dto.ContentBlockDTO;
 import com.nebula.Nebula.dto.CreateContentRequest;
 import com.nebula.Nebula.model.Content;
+import com.nebula.Nebula.model.ContentBlock;
 import com.nebula.Nebula.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,14 @@ public class ContentController {
 
         return new ResponseEntity<>(responseBodyDto, HttpStatus.CREATED);
     }
+
+//    @PutMapping("/update/content/{id}")
+//    public ResponseEntity<ResponseBodyDto> updateContent(@PathVariable UUID id, @RequestBody ContentBlock contentBlock){
+//
+//        ResponseBodyDto responseBodyDto = contentService.updateContent(id, contentBlock);
+//
+//        return new ResponseEntity<>(responseBodyDto, HttpStatus.CREATED);
+//    }
 
 
 

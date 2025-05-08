@@ -60,4 +60,10 @@ public class ContentService {
 
         return ResponseBodyDto.builder().code(201).message("Content Has Been Created").build();
     }
+
+//    public ResponseBodyDto updateContent(UUID id, ContentBlock contentBlock) {
+//
+//        Content content = contentRepo.findById(id).orElse(null);
+//
+//    }
 }

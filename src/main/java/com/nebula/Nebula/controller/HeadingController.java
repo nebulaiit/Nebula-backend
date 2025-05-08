@@ -42,11 +42,20 @@ public class HeadingController {
     }
 
     @PostMapping("/add-heading/{id}")
-    public ResponseEntity<ResponseBodyDto> addHeadding(@PathVariable UUID id,  @RequestBody Heading heading){
+    public ResponseEntity<ResponseBodyDto> addHeading(@PathVariable UUID id,  @RequestBody Heading heading){
         ResponseBodyDto responseBodyDto = headingService.addHeading(id, heading);
 
         return new ResponseEntity<>(responseBodyDto, HttpStatus.CREATED);
     }
 
+
+    @PutMapping("/updating/{id}")
+    public ResponseEntity<ResponseBodyDto> updateHeading(@PathVariable UUID id, @RequestBody Heading heading){
+
+        ResponseBodyDto responseBodyDto = headingService.updateHeading(id, heading);
+
+        return new ResponseEntity<>(responseBodyDto, HttpStatus.CREATED);
+
+    }
 
 }

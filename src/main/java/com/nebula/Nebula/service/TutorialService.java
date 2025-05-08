@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,5 +48,19 @@ public class TutorialService {
                 .code(400)
                 .message("Error While Creating Tutorial")
                 .build();
+    }
+
+    public ResponseBodyDto updateTutorial(UUID id, Tutorial tutorial) {
+
+        Tutorial tutorial1 = tutorialRepo.findById(id).orElse(null);
+
+        if (tutorial1 !=null){
+            tutorial1.setTutorialName(tutorial.getTutorialName());
+            tutorialRepo.save(tutorial1);
+
+        }
+
+        return ResponseBodyDto.builder().code(201).message("Heading has been Updated").build();
+
     }
 }

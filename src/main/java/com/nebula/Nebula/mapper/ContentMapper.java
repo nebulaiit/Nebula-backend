@@ -18,19 +18,12 @@ public class ContentMapper {
     public ContentBlockDTO toDTO(ContentBlock block) {
 
         Map<String, Object> extra = Collections.emptyMap();
-        if (block.getExtraJson() != null) {
-            try {
-                extra = objectMapper.readValue(block.getExtraJson(), new TypeReference<>() {});
-            } catch (Exception e) {
-                e.printStackTrace(); // Consider proper logging here
-            }
-        }
+
 
         return new ContentBlockDTO(
                 block.getId(),
                 block.getType(),
-                block.getValue(),
-                extra
+                block.getValue()
         );
     }
 
@@ -39,7 +32,7 @@ public class ContentMapper {
                 .type(dto.getType())
                 .value(dto.getValue())
                 .orderIndex(orderIndex)
-                .extraJson(writeExtraJson(dto.getExtra()))
+
                 .build();
     }
 

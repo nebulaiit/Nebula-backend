@@ -7,28 +7,28 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.swing.*;
 import java.util.UUID;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "reference_content")
 @Builder
-public class ContentBlock {
-
+public class ReferenceContent {
     @Id
     @GeneratedValue
     private UUID id;
 
-    private String type; // heading, paragraph, image, code, video
+    private String referenceTitle;
 
     @Lob
-    private String value;
+    private String referencePara;
 
-    private int orderIndex;
-
-    @ManyToOne
-    @JoinColumn(name = "content_id")
+    @OneToOne
+    @JoinColumn(name = "tutorial_id")
     @JsonIgnore
-    private Content content;
+    private Tutorial tutorial;
+
 }

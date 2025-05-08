@@ -60,5 +60,16 @@ public class HeadingService {
     }
 
 
+    public ResponseBodyDto updateHeading(UUID id, Heading heading) {
 
+        Heading heading1 = headingRepo.findById(id).orElse(null);
+
+        if (heading1 !=null){
+            heading1.setHeadingName(heading.getHeadingName());
+            headingRepo.save(heading1);
+        }
+
+        return ResponseBodyDto.builder().code(201).message("Heading has been Updated").build();
+
+    }
 }
