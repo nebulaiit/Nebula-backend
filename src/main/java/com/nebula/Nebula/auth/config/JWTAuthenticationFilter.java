@@ -15,14 +15,15 @@ import java.io.IOException;
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
 
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsService adminUserDetailsService;
+    private final UserDetailsService learnerUserDetailsService;
     private final JWTTokenHelper jwtTokenHelper;
 
-    public JWTAuthenticationFilter(JWTTokenHelper jwtTokenHelper, UserDetailsService userDetailsService) {
+    public JWTAuthenticationFilter(JWTTokenHelper jwtTokenHelper, UserDetailsService adminUserDetailsService, UserDetailsService learnerUserDetailsService) {
         this.jwtTokenHelper = jwtTokenHelper;
-        this.userDetailsService = userDetailsService;
+        this.adminUserDetailsService = adminUserDetailsService;
+        this.learnerUserDetailsService = learnerUserDetailsService;
     }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -33,25 +34,24 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        String authToken = authHeader.substring(7);
 
         try {
-            // Extract token manually from Authorization header
-            String authToken = authHeader.substring(7);
-
             if (authToken != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 String username = jwtTokenHelper.getUserNameFromToken(authToken);
+                String site = jwtTokenHelper.getClaimFromToken(authToken, "site");
 
-                if (username != null) {
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UserDetailsService selectedService =
+                        "TUTORIAL".equalsIgnoreCase(site) ? learnerUserDetailsService : adminUserDetailsService;
 
-                    if (jwtTokenHelper.validateToken(authToken, userDetails)) {
-                        UsernamePasswordAuthenticationToken authenticationToken =
-                                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                UserDetails userDetails = selectedService.loadUserByUsername(username);
 
-                        authenticationToken.setDetails(request.getRemoteAddr()); // Use IP instead of WebAuthenticationDetails
+                if (jwtTokenHelper.validateToken(authToken, userDetails)) {
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    }
+                    authentication.setDetails(request.getRemoteAddr());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
         } catch (Exception e) {

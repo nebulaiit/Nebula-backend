@@ -1,15 +1,18 @@
 package com.nebula.Nebula.service;
 
 import com.nebula.Nebula.auth.dto.ResponseBodyDto;
-import com.nebula.Nebula.auth.repo.ContentRepo;
+import com.nebula.Nebula.dto.ContentBlockDTO;
+import com.nebula.Nebula.dto.CreateContentRequest;
+import com.nebula.Nebula.mapper.ContentMapper;
 import com.nebula.Nebula.model.Content;
+import com.nebula.Nebula.model.ContentBlock;
 import com.nebula.Nebula.model.Topics;
+import com.nebula.Nebula.repository.ContentRepo;
 import com.nebula.Nebula.repository.TopicsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ContentService {
@@ -20,23 +23,40 @@ public class ContentService {
     @Autowired
     private ContentRepo contentRepo;
 
-    public List<Content> getContentByTopicName(String urlSlug) {
+    @Autowired
+    private ContentMapper contentMapper;
 
-      Topics topics= topicsRepo.findByUrlSlug(urlSlug);
-        return  topics.getContents();
+    public List<ContentBlockDTO> getContentByTopicName(String urlSlug) {
+
+        Optional<Content> contentOpt = contentRepo.findByTopicsUrlSlug(urlSlug);
+
+        if (contentOpt.isEmpty()) return Collections.emptyList();
+
+        List<ContentBlock> blocks = contentOpt.get().getBlocks();
+        return blocks.stream()
+                .map(contentMapper::toDTO)
+                .toList();
     }
 
-    public ResponseBodyDto createContent(UUID id, Content content) {
+    public ResponseBodyDto createContent(UUID id, CreateContentRequest request) {
 
         Topics topics = topicsRepo.findById(id).orElse(null);
 
-        Content content1 = Content.builder()
+        List<ContentBlock> blocks = new ArrayList<>();
+
+        for (int i = 0; i < request.getBlocks().size(); i++) {
+            ContentBlock block = contentMapper.toEntity(request.getBlocks().get(i), i);
+            blocks.add(block);
+        }
+
+        Content content = Content.builder()
+                .contentHeading(request.getContentHeading())
                 .topics(topics)
-                .contentHeading(content.getContentHeading())
-                .content(content.getContent())
+                .blocks(blocks)
                 .build();
 
-        contentRepo.save(content1);
+        blocks.forEach(block -> block.setContent(content));
+        contentRepo.save(content);
 
         return ResponseBodyDto.builder().code(201).message("Content Has Been Created").build();
     }

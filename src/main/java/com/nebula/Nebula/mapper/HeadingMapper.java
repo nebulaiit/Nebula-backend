@@ -1,9 +1,9 @@
 package com.nebula.Nebula.mapper;
 
-import com.nebula.Nebula.dto.HeadingDropDownDto;
 import com.nebula.Nebula.dto.HeadingDto;
 import com.nebula.Nebula.dto.TopicsDto;
 import com.nebula.Nebula.model.Heading;
+
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,30 +20,16 @@ public class HeadingMapper {
         }
 
         List<TopicsDto> topicDTOs = heading.getTopics().stream()
-                .map(topic -> new TopicsDto(topic.getTopicName(), topic.getUrlSlug()))
+                .map(topic -> new TopicsDto(topic.getId(),topic.getTopicName(), topic.getUrlSlug()))
                 .collect(Collectors.toList());
 
         return HeadingDto.builder()
                 .id(heading.getId())
                 .headingName(heading.getHeadingName())
+                .orderIndex(heading.getOrderIndex())
                 .topics(topicDTOs)
                 .build();
     }
-    public HeadingDropDownDto toDropdownDto(Heading heading) {
 
-        if (heading == null) {
-            return null;
-        }
-
-        List<TopicsDto> topicDTOs = heading.getTopics().stream()
-                .map(topic -> new TopicsDto(topic.getTopicName(), topic.getUrlSlug()))
-                .collect(Collectors.toList());
-
-        return HeadingDropDownDto.builder()
-                .id(heading.getId())
-                .headingName(heading.getHeadingName())
-
-                .build();
-    }
 
 }

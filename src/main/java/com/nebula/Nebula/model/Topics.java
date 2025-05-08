@@ -24,6 +24,7 @@ public class Topics {
 
     private String topicName;
 
+    @Column(unique = true, nullable = false)
     private String urlSlug; // for routing like /java/variables
 
     @ManyToOne

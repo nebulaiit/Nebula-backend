@@ -8,6 +8,4 @@ import java.util.UUID;
 
 @Repository
 public interface HeadingRepo extends JpaRepository<Heading, UUID> {
-
-    Heading findByHeadingName(String headingName);
 }

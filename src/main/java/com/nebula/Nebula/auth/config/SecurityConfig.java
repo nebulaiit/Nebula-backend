@@ -1,5 +1,8 @@
 package com.nebula.Nebula.auth.config;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -16,33 +19,35 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserDetailsService userDetailsService;
-    private final JWTTokenHelper jwtTokenHelper;
+    @Qualifier("myUserDetailsService") // for admin panel
+    private final UserDetailsService myUserDetailsService;
 
-    public SecurityConfig(UserDetailsService userDetailsService, JWTTokenHelper jwtTokenHelper) {
-        this.userDetailsService = userDetailsService;
-        this.jwtTokenHelper = jwtTokenHelper;
-    }
+    @Qualifier("learnerUserDetailsService") // for tutorial site
+    private final UserDetailsService learnerUserDetailsService;
+
+    @Autowired
+    private JWTTokenHelper jwtTokenHelper;
 
     private static final String[] PUBLIC_APIS = {
             "/auth/**",
-//            "/api/tutorial/**"
-
+            "/auth/tutorial/**"
     };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ CORS Enabled
-                .csrf(csrf -> csrf.disable()) // ✅ CSRF Disabled for APIs
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(PUBLIC_APIS).permitAll() // ✅ Public APIs allowed
+                        .requestMatchers(PUBLIC_APIS).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/tutorial/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/tutorial").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/heading/**").permitAll()
@@ -52,7 +57,7 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(new JWTAuthenticationFilter(jwtTokenHelper, userDetailsService),
+                .addFilterBefore(new JWTAuthenticationFilter(jwtTokenHelper, myUserDetailsService, learnerUserDetailsService),
                         UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
@@ -60,10 +65,15 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        return new ProviderManager(daoAuthenticationProvider);
+        DaoAuthenticationProvider adminProvider = new DaoAuthenticationProvider();
+        adminProvider.setUserDetailsService(myUserDetailsService);
+        adminProvider.setPasswordEncoder(passwordEncoder());
+
+        DaoAuthenticationProvider tutorialProvider = new DaoAuthenticationProvider();
+        tutorialProvider.setUserDetailsService(learnerUserDetailsService);
+        tutorialProvider.setPasswordEncoder(passwordEncoder());
+
+        return new ProviderManager(Arrays.asList(adminProvider, tutorialProvider));
     }
 
     @Bean
@@ -75,7 +85,10 @@ public class SecurityConfig {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("https://nebula-admin-iota.vercel.app" , "https://nebula-main-site.vercel.app" , "http://localhost:5173"));// ✅ Allow frontend
+        config.setAllowedOrigins(List.of(
+                "https://nebula-admin-iota.vercel.app",
+                "https://nebula-main-site.vercel.app",
+                "http://localhost:5173"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

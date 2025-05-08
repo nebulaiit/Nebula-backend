@@ -19,7 +19,7 @@ public class TutorialController {
     private TutorialService tutorialService;
 
 
-    @GetMapping("/tutorial")
+    @GetMapping("/tutorial")  // /api/tutorial
     public ResponseEntity<List<TutorialDto>> getAllTutorial() {
 
         List<TutorialDto> tutorialDto = tutorialService.getAllTutorial();
@@ -27,7 +27,7 @@ public class TutorialController {
         return new ResponseEntity<>(tutorialDto, HttpStatus.OK);
     }
 
-    @GetMapping("/tutorial/{tutorialName}")
+    @GetMapping("/tutorial/{tutorialName}") // /api/tutorial/Java
     public ResponseEntity<Tutorial> getTutorial(@PathVariable String tutorialName) {
 
         Tutorial tutorial = tutorialService.getTutorial(tutorialName);
@@ -35,7 +35,7 @@ public class TutorialController {
         return new ResponseEntity<>(tutorial, HttpStatus.OK);
     }
 
-    @PostMapping("/tutorial")
+    @PostMapping("/tutorial") // /api/tutorial
     public ResponseEntity<ResponseBodyDto> createTutorial(@RequestBody Tutorial tutorial) {
 
         ResponseBodyDto responseBodyDto = tutorialService.createTutorial(tutorial);

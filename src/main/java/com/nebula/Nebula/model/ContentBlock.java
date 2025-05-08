@@ -7,30 +7,31 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "heading")
 @Builder
-public class Heading {
+public class ContentBlock {
 
     @Id
     @GeneratedValue
     private UUID id;
 
-    private String headingName;
+    private String type; // heading, paragraph, image, code, video
+
+    @Lob
+    private String value;
+
+    @Column(columnDefinition = "TEXT")
+    private String extraJson;
 
     private int orderIndex;
 
-    @OneToMany(mappedBy = "heading", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Topics> topics;
-
     @ManyToOne
-    @JoinColumn(name = "tutorial_id")
+    @JoinColumn(name = "content_id")
     @JsonIgnore
-    private Tutorial tutorial;
+    private Content content;
 }

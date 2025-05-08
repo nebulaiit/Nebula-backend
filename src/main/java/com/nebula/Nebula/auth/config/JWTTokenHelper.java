@@ -117,4 +117,8 @@ public class JWTTokenHelper {
         }
         return claims;
     }
+
+    public String getClaimFromToken(String token, String claimName) {
+        return getAllClaimsFromToken(token).get(claimName, String.class);
+    }
 }

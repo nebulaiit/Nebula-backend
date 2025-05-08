@@ -1,6 +1,8 @@
 package com.nebula.Nebula.controller;
 
 import com.nebula.Nebula.auth.dto.ResponseBodyDto;
+import com.nebula.Nebula.dto.ContentBlockDTO;
+import com.nebula.Nebula.dto.CreateContentRequest;
 import com.nebula.Nebula.model.Content;
 import com.nebula.Nebula.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +20,18 @@ public class ContentController {
     @Autowired
     private ContentService contentService;
 
+
     @GetMapping("/content/{urlSlug}")
-    public ResponseEntity<List<Content>> getContentByTopicName(@PathVariable String urlSlug){
-        List<Content> contents = contentService.getContentByTopicName(urlSlug);
+    public ResponseEntity<List<ContentBlockDTO>> getContentByTopicName(@PathVariable String urlSlug){
+        List<ContentBlockDTO> contents = contentService.getContentByTopicName(urlSlug);
 
         return new ResponseEntity<>(contents, HttpStatus.OK);
     }
 
     @PostMapping("/content/{id}")
-    public ResponseEntity<ResponseBodyDto> createContent(@PathVariable UUID id, @RequestBody Content content){
+    public ResponseEntity<ResponseBodyDto> createContent(@PathVariable UUID id, @RequestBody CreateContentRequest request){
 
-        ResponseBodyDto responseBodyDto = contentService.createContent(id, content);
+        ResponseBodyDto responseBodyDto = contentService.createContent(id, request);
 
         return new ResponseEntity<>(responseBodyDto, HttpStatus.CREATED);
     }

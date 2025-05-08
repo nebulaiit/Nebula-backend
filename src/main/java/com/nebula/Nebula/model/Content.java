@@ -24,14 +24,13 @@ public class Content {
 
     private String contentHeading;
 
-    @Lob
-    private String content;
-
     @ManyToOne
     @JoinColumn(name = "topics_id")
     @JsonIgnore
     private Topics topics;
 
-    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL)
-    private List<Resources> resources;
+    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("orderIndex ASC")
+    @JsonIgnore
+    private List<ContentBlock> blocks;
 }

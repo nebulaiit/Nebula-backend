@@ -1,18 +1,20 @@
 package com.nebula.Nebula.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TopicsDto {
-    private UUID id;
-    private String topicName;
-    private String urlSlug;
+public class ContactFormRequest {
+
+    private String fullName;
+    private String email;
+    private String phoneNumber;
+    private String message;
+
 }
