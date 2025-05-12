@@ -50,7 +50,7 @@ public class SecurityConfig {
                         .requestMatchers(PUBLIC_APIS).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/tutorial/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/tutorial").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/reference/**     ").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/reference/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/reference").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/heading/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/heading").authenticated()
