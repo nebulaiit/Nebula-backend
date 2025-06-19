@@ -20,7 +20,9 @@ public class LearnerUser {
     @GeneratedValue
     private UUID id;
 
-    private String name;
+    private String firstName;
+
+    private String lastName;
 
     @Column(unique = true, nullable = false)
     private String email;

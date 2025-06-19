@@ -1,10 +1,7 @@
 package com.nebula.Nebula.auth.controller;
 
 import com.nebula.Nebula.auth.config.JWTTokenHelper;
-import com.nebula.Nebula.auth.dto.LoginRequest;
-import com.nebula.Nebula.auth.dto.ResponseBodyDto;
-import com.nebula.Nebula.auth.dto.TutorialSignupRequest;
-import com.nebula.Nebula.auth.dto.UserToken;
+import com.nebula.Nebula.auth.dto.*;
 import com.nebula.Nebula.auth.entity.LearnerUser;
 import com.nebula.Nebula.auth.repo.LearnerUserRepo;
 import com.nebula.Nebula.auth.service.TutorialAuthService;
@@ -13,10 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth/tutorial")
@@ -35,12 +31,19 @@ public class TutorialAuthController {
     private TutorialAuthService tutorialAuthService;
 
     @PostMapping("/login")
-    public ResponseEntity<UserToken> login(@RequestBody LoginRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUserName(), request.getPassword())
-        );
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUserName(), request.getPassword())
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        }
 
         var learnerUser = repository.findByEmail(request.getUserName());
+        if (learnerUser == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
         var jwt = jwtService.generateToken(learnerUser.getEmail());
 
         UserToken userToken = UserToken.builder()
@@ -56,6 +59,23 @@ public class TutorialAuthController {
     public ResponseEntity<ResponseBodyDto> signup(@RequestBody TutorialSignupRequest request) {
 
         ResponseBodyDto responseBodyDto = tutorialAuthService.signUp(request);
+
+        return new ResponseEntity<>(responseBodyDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/user-details/{id}")
+    public ResponseEntity<UserDto> getUserDetails(@PathVariable UUID id){
+
+        UserDto userDto = tutorialAuthService.getUserDetails(id);
+
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
+
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseBodyDto> deleteUser(@PathVariable UUID id){
+
+        ResponseBodyDto responseBodyDto = tutorialAuthService.deleteUserById(id);
 
         return new ResponseEntity<>(responseBodyDto, HttpStatus.OK);
     }
