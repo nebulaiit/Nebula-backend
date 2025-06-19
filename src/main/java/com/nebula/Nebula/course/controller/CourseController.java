@@ -39,7 +39,7 @@ public class CourseController {
     }
 
 
-    @GetMapping("/course/{id}")
+    @GetMapping("/courses/{id}")
     public ResponseEntity<Course> getCourseByID(@PathVariable UUID id){
 
         Course course = courseService.getCourseById(id);
@@ -48,7 +48,7 @@ public class CourseController {
 
     }
 
-    @GetMapping("/course/content/{id}")
+    @GetMapping("/courses/content/{id}")
     public ResponseEntity<CourseContentDto> getCourseContentByID(@PathVariable UUID id){
 
       CourseContentDto courseContentDto = courseService.getCourseContentByID(id);
