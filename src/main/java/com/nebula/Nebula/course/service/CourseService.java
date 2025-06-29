@@ -2,6 +2,7 @@ package com.nebula.Nebula.course.service;
 
 import com.nebula.Nebula.auth.dto.ResponseBodyDto;
 import com.nebula.Nebula.course.dto.CourseContentDto;
+import com.nebula.Nebula.course.dto.CourseDto;
 import com.nebula.Nebula.course.mapper.CourseMapper;
 import com.nebula.Nebula.course.model.Course;
 import com.nebula.Nebula.course.model.CourseFolder;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -22,9 +24,10 @@ public class CourseService {
     @Autowired
     private CourseMapper courseMapper;
 
-    public List<Course> getAllCourses() {
+    public List<CourseDto> getAllCourses() {
 
-        return courseRepo.findAll();
+        List<Course> courseList= courseRepo.findAll();
+        return courseList.stream().map(courseMapper::toCourseDto).collect(Collectors.toList());
     }
 
     public ResponseBodyDto createCourse(Course course) {

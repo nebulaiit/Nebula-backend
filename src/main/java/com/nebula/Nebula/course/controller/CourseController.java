@@ -2,6 +2,7 @@ package com.nebula.Nebula.course.controller;
 
 import com.nebula.Nebula.auth.dto.ResponseBodyDto;
 import com.nebula.Nebula.course.dto.CourseContentDto;
+import com.nebula.Nebula.course.dto.CourseDto;
 import com.nebula.Nebula.course.model.Course;
 import com.nebula.Nebula.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,9 @@ public class CourseController {
     private CourseService courseService;
 
     @GetMapping("/courses")
-    public ResponseEntity<List<Course>> getAllCourses(){
+    public ResponseEntity<List<CourseDto>> getAllCourses(){
 
-        List<Course> courses = courseService.getAllCourses();
+        List<CourseDto> courses = courseService.getAllCourses();
 
         return new ResponseEntity<>(courses, HttpStatus.OK);
     }
