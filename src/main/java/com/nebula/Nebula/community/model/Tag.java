@@ -18,6 +18,7 @@ import java.util.UUID;
 @Table(name = "tag")
 @Builder
 public class Tag {
+
     @Id
     @GeneratedValue
     private UUID id;

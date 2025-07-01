@@ -26,13 +26,12 @@ public class Reply {
     private String author;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "posts_id")
     @JsonIgnore
     private Post post;
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
-    @JoinColumn
     private Reply parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
