@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,8 +38,17 @@ public class CourseController {
     }
 
 
+    @GetMapping("/courses/language/{language}")
+    public ResponseEntity<List<CourseDto>> getAllCoursesByLanguage(@PathVariable String language){
+
+        List<CourseDto> courses = courseService.getAllCoursesByLanguage(language);
+
+        return new ResponseEntity<>(courses, HttpStatus.OK);
+    }
+
+
     @GetMapping("/courses/{id}")
-    public ResponseEntity<Course> getCourseByID(@PathVariable UUID id){
+    public ResponseEntity<Course> getCourseById(@PathVariable UUID id){
 
         Course course = courseService.getCourseById(id);
 
@@ -57,6 +64,15 @@ public class CourseController {
         return new ResponseEntity<>(courseContentDto, HttpStatus.OK);
 
     }
+
+    @PutMapping("/course/{id}")
+    public ResponseEntity<ResponseBodyDto> updateCourse(@PathVariable UUID id, @RequestBody Course updatedCourse) {
+
+        ResponseBodyDto responseBodyDto = courseService.updateCourse(id, updatedCourse);
+
+        return new ResponseEntity<>(responseBodyDto, HttpStatus.OK);
+    }
+
 
 
     @DeleteMapping("/course/{id}")

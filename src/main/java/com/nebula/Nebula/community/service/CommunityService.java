@@ -1,6 +1,8 @@
 package com.nebula.Nebula.community.service;
 
 import com.nebula.Nebula.auth.dto.ResponseBodyDto;
+import com.nebula.Nebula.auth.entity.LearnerUser;
+import com.nebula.Nebula.auth.repo.LearnerUserRepo;
 import com.nebula.Nebula.community.dtos.PostRequestDto;
 import com.nebula.Nebula.community.dtos.ResponsePostDto;
 import com.nebula.Nebula.community.mapper.CommunityMapper;
@@ -14,10 +16,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class CommunityService {
+
+
+    @Autowired
+    private LearnerUserRepo learnerUserRepo;
+
 
     @Autowired
     private PostRepo postRepo;
@@ -31,10 +39,12 @@ public class CommunityService {
     @Autowired
     private CommunityMapper communityMapper;
 
-    public ResponseBodyDto createPost(PostRequestDto post) {
+    public ResponseBodyDto createPost(PostRequestDto post, UUID userId) {
 
         Post post1 = new Post();
         post1.setContent(post.getContent());
+
+        LearnerUser learnerUser = learnerUserRepo.findById(userId).orElse(null);
 
         List<Tag> tagEntities = new ArrayList<>();
 
@@ -49,7 +59,9 @@ public class CommunityService {
         }
 
         post1.setTags(tagEntities);
-         postRepo.save(post1);
+        post1.setUser(learnerUser);
+
+        postRepo.save(post1);
 
         return ResponseBodyDto.builder().code(201).message("Post created").build();
     }

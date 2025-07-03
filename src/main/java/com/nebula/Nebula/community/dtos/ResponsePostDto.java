@@ -22,5 +22,7 @@ public class ResponsePostDto {
     private String content;
     private List<Tag> tags;
     private List<Reply> replies ;
+    private String firstName;
+    private String lastName;
     private Map<String, Integer> reactions = new HashMap<>();
 }

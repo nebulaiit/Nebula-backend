@@ -6,6 +6,7 @@ import com.nebula.Nebula.course.dto.CourseDto;
 import com.nebula.Nebula.course.mapper.CourseMapper;
 import com.nebula.Nebula.course.model.Course;
 import com.nebula.Nebula.course.model.CourseFolder;
+import com.nebula.Nebula.course.model.CoursePrice;
 import com.nebula.Nebula.course.model.UploadedContent;
 import com.nebula.Nebula.course.repo.CourseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,5 +80,35 @@ public class CourseService {
         Course course = courseRepo.findById(id).orElse(null);
 
         return courseMapper.toDto(course);
+    }
+
+    public List<CourseDto> getAllCoursesByLanguage(String language) {
+        return courseRepo.findByLanguage(language)
+                .stream().map(courseMapper::toCourseDto).collect(Collectors.toList());
+    }
+
+    public ResponseBodyDto updateCourse(UUID id, Course updatedCourse) {
+
+        Course existingCourse = courseRepo.findById(id)
+                .orElseThrow(null);
+
+        // Update only allowed fields
+        existingCourse.setCourseTitle(updatedCourse.getCourseTitle());
+        existingCourse.setCourseDescription(updatedCourse.getCourseDescription());
+        existingCourse.setThumbnailUrl(updatedCourse.getThumbnailUrl());
+        existingCourse.setLanguages(updatedCourse.getLanguages());
+
+        if (updatedCourse.getCoursePrice() != null) {
+            CoursePrice updatedPrice = updatedCourse.getCoursePrice();
+            CoursePrice existingPrice = existingCourse.getCoursePrice();
+            existingPrice.setPrice(updatedPrice.getPrice());
+            existingPrice.setDiscount(updatedPrice.getDiscount());
+            existingPrice.setDuration(updatedPrice.getDuration());
+            existingPrice.setDurationUnit(updatedPrice.getDurationUnit());
+        }
+
+        courseRepo.save(existingCourse);
+
+        return ResponseBodyDto.builder().code(201).message("Course Has Been Updated").build();
     }
 }

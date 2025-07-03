@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/community")
@@ -19,10 +20,10 @@ public class CommunityController {
     @Autowired
     private CommunityService communityService;
 
-    @PostMapping("/post")
-    public ResponseEntity<ResponseBodyDto> createPost(@RequestBody PostRequestDto post) {
+    @PostMapping("/post/{id}")
+    public ResponseEntity<ResponseBodyDto> createPost(@RequestBody PostRequestDto post, @PathVariable UUID id) {
 
-        ResponseBodyDto responseBodyDto = communityService.createPost(post);
+        ResponseBodyDto responseBodyDto = communityService.createPost(post,id);
 
         return new ResponseEntity<>(responseBodyDto, HttpStatus.CREATED);
 

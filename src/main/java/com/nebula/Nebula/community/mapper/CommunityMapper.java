@@ -13,6 +13,8 @@ public class CommunityMapper {
                 .content(post.getContent())
                 .tags(post.getTags())
                 .replies(post.getReplies())
+                .firstName(post.getUser().getFirstName())
+                .lastName(post.getUser().getLastName())
                 .reactions(post.getReactions())
                 .build();
     }

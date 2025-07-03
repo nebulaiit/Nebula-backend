@@ -28,6 +28,10 @@ public class Course {
     // Binary thumbnail image (e.g., JPEG, PNG)
     private String thumbnailUrl;
 
+    @ElementCollection
+    @CollectionTable(name = "course_languages", joinColumns = @JoinColumn(name = "course_id"))
+    @Column(name = "language")
+    private List<String> languages;
 
     @OneToOne(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private CoursePrice coursePrice;

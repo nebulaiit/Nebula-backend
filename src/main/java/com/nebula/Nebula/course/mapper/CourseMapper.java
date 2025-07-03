@@ -36,8 +36,10 @@ public class CourseMapper {
         return CourseDto.builder()
                 .id(course.getId())
                 .courseTitle(course.getCourseTitle())
+                .thumbnailUrl(course.getThumbnailUrl())
                 .price(course.getCoursePrice().getPrice())
                 .discount(course.getCoursePrice().getDiscount())
+                .effectivePrice(course.getCoursePrice().getEffectivePrice())
                 .duration(course.getCoursePrice().getDuration())
                 .durationUnit(course.getCoursePrice().getDurationUnit())
                 .build();
