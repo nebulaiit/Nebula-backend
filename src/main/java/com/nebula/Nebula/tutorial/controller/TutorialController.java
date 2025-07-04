@@ -44,14 +44,6 @@ public class TutorialController {
         return new ResponseEntity<>(tutorialDto, HttpStatus.CREATED);
 
     }
-    @PostMapping("/tutorial") // /api/tutorial
-    public ResponseEntity<TutorialDto> createTutorial(@RequestBody Tutorial tutorial) {
-
-        TutorialDto tutorialDto = tutorialService.createTutorial(tutorial);
-
-        return new ResponseEntity<>(tutorialDto, HttpStatus.CREATED);
-
-    }
 
     @PutMapping("/tutorial/{id}")
     public ResponseEntity<ResponseBodyDto> updatingTutorial(@PathVariable UUID id, @RequestBody Tutorial tutorial){

@@ -34,15 +34,7 @@ public class TutorialService {
         return tutorial.stream().map(tutorialMapper::toDto).collect(Collectors.toList());
     }
 
-    public TutorialDto createTutorial(Tutorial tutorial) {
 
-         Tutorial tutorial1 =   tutorialRepo.save(tutorial);
-
-            return TutorialDto.builder()
-                    .id(tutorial1.getId())
-                    .tutorialName(tutorial1.getTutorialName())
-                    .build();
-    }
 
     public ResponseBodyDto updateTutorial(UUID id, Tutorial tutorial) {
 
