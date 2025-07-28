@@ -23,7 +23,9 @@ public class Blogs {
 
     private String blogTitle;
 
-    private String blogThumbnail;
+    @Lob
+    @Column(name = "blog_thumbnail", columnDefinition = "LONGBLOB")
+    private byte[] blogThumbnail;
 
     private String category;
 
@@ -39,5 +41,7 @@ public class Blogs {
 
     private LocalDateTime updatedAt;
 
+    private int views;       // increment on blog open/read
+    private int likes;
 
 }

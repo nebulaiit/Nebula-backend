@@ -2,8 +2,8 @@ package com.nebula.Nebula.community.controller;
 
 import com.nebula.Nebula.auth.dto.ResponseBodyDto;
 import com.nebula.Nebula.community.dtos.PostRequestDto;
+import com.nebula.Nebula.community.dtos.ReplyRequestDto;
 import com.nebula.Nebula.community.dtos.ResponsePostDto;
-import com.nebula.Nebula.community.model.Post;
 import com.nebula.Nebula.community.service.CommunityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,5 +36,12 @@ public class CommunityController {
 
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
+
+    @PostMapping("/add-reply")
+    public ResponseEntity<ResponseBodyDto> addReply(@RequestBody ReplyRequestDto replyDto) {
+        ResponseBodyDto response = communityService.addReply(replyDto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
 
 }

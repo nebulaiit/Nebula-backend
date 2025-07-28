@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -38,10 +40,13 @@ public class BlogController {
     }
 
     @PostMapping("/add-blog")
-    public ResponseEntity<ResponseBodyDto> createBlog(@RequestBody BlogRequest blogs){
+    public ResponseEntity<ResponseBodyDto> createBlog(
+            @RequestPart("blog") BlogRequest blogs,
+            @RequestPart("blogThumbnail") MultipartFile imageFile) throws IOException {
 
-        ResponseBodyDto responseBodyDto = blogService.createBlog(blogs);
-
-        return new ResponseEntity<>(responseBodyDto, HttpStatus.CREATED);
+        ResponseBodyDto response = blogService.createBlog(blogs, imageFile);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+
 }

@@ -16,7 +16,7 @@ public class BlogList {
 
     private UUID id;
     private String blogTitle;
-    private String blogThumbnail;
+    private String blogThumbnailBase64; // 🔥 base64 image string
     private String category;
     private String author;
     private String slug;

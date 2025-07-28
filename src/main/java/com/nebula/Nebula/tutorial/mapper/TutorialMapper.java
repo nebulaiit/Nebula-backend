@@ -16,6 +16,7 @@ public class TutorialMapper {
         return TutorialDto.builder()
                 .id(tutorial.getId())
                 .tutorialName(tutorial.getTutorialName())
+                .category(tutorial.getCategory())
                 .build();
 
     }

@@ -1,14 +1,18 @@
 package com.nebula.Nebula.auth.service;
 
-import com.nebula.Nebula.auth.dto.ResponseBodyDto;
-import com.nebula.Nebula.auth.dto.TutorialSignupRequest;
-import com.nebula.Nebula.auth.dto.UserDto;
+import com.nebula.Nebula.auth.config.JWTTokenHelper;
+import com.nebula.Nebula.auth.dto.*;
 import com.nebula.Nebula.auth.entity.LearnerUser;
+import com.nebula.Nebula.auth.helper.VerificationCode;
 import com.nebula.Nebula.auth.repo.LearnerUserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -19,6 +23,15 @@ public class TutorialAuthService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private JWTTokenHelper jwtService;
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
 
     public ResponseBodyDto signUp(TutorialSignupRequest request) {
 
@@ -37,7 +50,12 @@ public class TutorialAuthService {
         learnerUser1.setLastName(request.getLastName());
         learnerUser1.setEmail(request.getEmail());
         learnerUser1.setPassword(passwordEncoder.encode(request.getPassword()));
-        learnerUser1.setEnabled(true);
+        learnerUser1.setPhoneNumber(request.getPhoneNumber());
+
+        String code = VerificationCode.generateCode();
+        learnerUser1.setVerificationCode(code);
+        learnerUser1.setAuthProvider("Local");
+        emailService.sendMail(learnerUser1);
 
         learnerUserRepo.save(learnerUser1);
 
@@ -47,10 +65,13 @@ public class TutorialAuthService {
                 .build();
     }
 
+
+
     public UserDto getUserDetails(UUID id) {
 
         LearnerUser learnerUser = learnerUserRepo.findById(id).orElse(null);
 
+        assert learnerUser != null;
         return this.userToDto(learnerUser);
     }
 
@@ -73,4 +94,25 @@ public class TutorialAuthService {
                 .message("User Deleted Successfully")
                 .build();
     }
+
+    public ResponseBodyDto updatePassword(LoginRequest loginRequest) {
+
+        LearnerUser existing = learnerUserRepo.findByEmail(loginRequest.getUserName());
+        if (null != existing) {
+
+            existing.setPassword(passwordEncoder.encode(loginRequest.getPassword()));
+
+            learnerUserRepo.save(existing);
+            return ResponseBodyDto.builder().code(200).message("Password updated").build();
+        }
+        return ResponseBodyDto.builder().code(400).message("Error while updating password").build();
+    }
+
+    public void verifyUser(String userName) {
+        LearnerUser user = learnerUserRepo.findByEmail(userName);
+        user.setEnabled(true);
+        learnerUserRepo.save(user);
+    }
+
+
 }

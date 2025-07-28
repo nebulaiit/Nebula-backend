@@ -5,15 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TutorialSignupRequest {
-
-    private String firstName;
-    private String lastName;
-    private String email;
-    private CharSequence password;
-    private String phoneNumber;
+public class GoogleAuthResponse {
+    private String token;
+    private UUID userId;
 }

@@ -9,7 +9,9 @@ import com.nebula.Nebula.blogs.model.Blogs;
 import com.nebula.Nebula.blogs.repo.BlogRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +37,7 @@ public class BlogService {
         return blogs.stream().map(blogMapper::toDto).collect(Collectors.toList());
     }
 
-    public ResponseBodyDto createBlog(BlogRequest blogs) {
+    public ResponseBodyDto createBlog(BlogRequest blogs, MultipartFile imagesFile) throws IOException {
 
         Blogs existingBlog = blogRepo.findByBlogTitle(blogs.getBlogTitle());
 
@@ -45,6 +47,8 @@ public class BlogService {
 
         }
         else {
+
+            System.out.println(blogs);
             String slug = generateSlug(blogs.getBlogTitle());
 
             // Optional: check if slug already exists (handle duplicates)
@@ -57,7 +61,7 @@ public class BlogService {
 
             Blogs blogs1 = Blogs.builder()
                     .blogTitle(blogs.getBlogTitle())
-                    .blogThumbnail(blogs.getBlogThumbnail())
+                    .blogThumbnail(imagesFile.getBytes())
                     .author(blogs.getAuthor())
                     .category(blogs.getCategory())
                     .content(blogs.getContent())

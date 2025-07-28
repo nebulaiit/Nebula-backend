@@ -34,8 +34,6 @@ public class TutorialService {
         return tutorial.stream().map(tutorialMapper::toDto).collect(Collectors.toList());
     }
 
-
-
     public ResponseBodyDto updateTutorial(UUID id, Tutorial tutorial) {
 
         Tutorial tutorial1 = tutorialRepo.findById(id).orElse(null);

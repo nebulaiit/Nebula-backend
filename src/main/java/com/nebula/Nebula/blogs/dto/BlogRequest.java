@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -15,7 +16,6 @@ import java.util.UUID;
 public class BlogRequest {
 
     private String blogTitle;
-    private String blogThumbnail;
     private String category;
     private String author;
     private String content;

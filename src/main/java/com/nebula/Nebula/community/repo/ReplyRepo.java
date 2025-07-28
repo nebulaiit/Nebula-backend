@@ -4,7 +4,10 @@ import com.nebula.Nebula.community.model.Reply;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface ReplyRepo extends JpaRepository<Reply, UUID> {}
+public interface ReplyRepo extends JpaRepository<Reply, UUID> {
+    List<Reply> findByPostIdAndParentIsNull(UUID postId);
+}

@@ -15,4 +15,5 @@ public class TutorialDto {
 
     private UUID id;
     private String tutorialName;
+    private String category;
 }

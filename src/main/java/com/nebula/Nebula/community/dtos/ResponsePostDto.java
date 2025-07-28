@@ -21,7 +21,7 @@ public class ResponsePostDto {
     private UUID id;
     private String content;
     private List<Tag> tags;
-    private List<Reply> replies ;
+    private List<ReplyResponseDto> replies;  // updated from List<Reply>
     private String firstName;
     private String lastName;
     private Map<String, Integer> reactions = new HashMap<>();

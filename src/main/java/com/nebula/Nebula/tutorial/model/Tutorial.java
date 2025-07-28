@@ -24,6 +24,8 @@ public class Tutorial {
 
     private String tutorialName;
 
+    private String category;
+
     @OneToMany(mappedBy = "tutorial", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Heading> heading;
 

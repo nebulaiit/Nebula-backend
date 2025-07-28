@@ -4,9 +4,11 @@ import com.nebula.Nebula.auth.dto.ResponseBodyDto;
 import com.nebula.Nebula.auth.entity.LearnerUser;
 import com.nebula.Nebula.auth.repo.LearnerUserRepo;
 import com.nebula.Nebula.community.dtos.PostRequestDto;
+import com.nebula.Nebula.community.dtos.ReplyRequestDto;
 import com.nebula.Nebula.community.dtos.ResponsePostDto;
 import com.nebula.Nebula.community.mapper.CommunityMapper;
 import com.nebula.Nebula.community.model.Post;
+import com.nebula.Nebula.community.model.Reply;
 import com.nebula.Nebula.community.model.Tag;
 import com.nebula.Nebula.community.repo.PostRepo;
 import com.nebula.Nebula.community.repo.ReplyRepo;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,7 +28,6 @@ public class CommunityService {
 
     @Autowired
     private LearnerUserRepo learnerUserRepo;
-
 
     @Autowired
     private PostRepo postRepo;
@@ -38,6 +40,8 @@ public class CommunityService {
 
     @Autowired
     private CommunityMapper communityMapper;
+
+
 
     public ResponseBodyDto createPost(PostRequestDto post, UUID userId) {
 
@@ -67,9 +71,34 @@ public class CommunityService {
     }
 
     public List<ResponsePostDto> getAllPosts() {
+        List<Post> posts = postRepo.findAll();
 
-        List<Post> posts= postRepo.findAll();
-
-        return posts.stream().map(communityMapper::toPostDto).collect(Collectors.toList());
+       return posts.stream().map(communityMapper::toPostDto).collect(Collectors.toList());
     }
+
+
+    public ResponseBodyDto addReply(ReplyRequestDto dto) {
+        Reply reply = new Reply();
+        reply.setContent(dto.getContent());
+        reply.setAuthor(dto.getAuthor());
+
+        if (dto.getPostId() != null) {
+            Post post = postRepo.findById(dto.getPostId()).orElseThrow();
+            reply.setPost(post);
+        }
+
+        if (dto.getParentId() != null) {
+            Reply parent = replyRepo.findById(dto.getParentId()).orElseThrow();
+            reply.setParent(parent);
+            reply.setPost(parent.getPost()); // Inherit post from parent reply
+        }
+
+        replyRepo.save(reply);
+
+        return ResponseBodyDto.builder()
+                .code(201)
+                .message("Reply added successfully")
+                .build();
+    }
+
 }

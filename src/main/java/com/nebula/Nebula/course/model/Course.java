@@ -28,6 +28,9 @@ public class Course {
     // Binary thumbnail image (e.g., JPEG, PNG)
     private String thumbnailUrl;
 
+    @Column(nullable = false)
+    private String category;  // ✅ New category field
+
     @ElementCollection
     @CollectionTable(name = "course_languages", joinColumns = @JoinColumn(name = "course_id"))
     @Column(name = "language")

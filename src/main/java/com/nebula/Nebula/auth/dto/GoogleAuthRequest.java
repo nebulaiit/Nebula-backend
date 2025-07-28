@@ -9,11 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TutorialSignupRequest {
+public class GoogleAuthRequest {
+    private String tokenId; // This is the Google access token
 
-    private String firstName;
-    private String lastName;
-    private String email;
-    private CharSequence password;
-    private String phoneNumber;
 }

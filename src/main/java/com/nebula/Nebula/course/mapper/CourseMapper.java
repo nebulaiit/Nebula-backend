@@ -42,6 +42,7 @@ public class CourseMapper {
                 .effectivePrice(course.getCoursePrice().getEffectivePrice())
                 .duration(course.getCoursePrice().getDuration())
                 .durationUnit(course.getCoursePrice().getDurationUnit())
+                .category(course.getCategory())
                 .build();
     }
 }

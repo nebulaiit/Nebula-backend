@@ -5,15 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class TutorialSignupRequest {
+@NoArgsConstructor
+public class SupportDto {
 
-    private String firstName;
-    private String lastName;
+    private UUID id;
+    private String empId;
+    private String name;
     private String email;
-    private CharSequence password;
-    private String phoneNumber;
+    private String subjectLine;
+    private String message;
 }

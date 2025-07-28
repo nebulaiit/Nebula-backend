@@ -21,4 +21,5 @@ public class CourseDto {
     private double effectivePrice;
     private int duration;        // e.g., 1
     private String durationUnit; // e.g., "Year(s)"
+    private String category;
 }

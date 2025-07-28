@@ -30,5 +30,14 @@ public class LearnerUser {
     @Column(nullable = false)
     private String password;
 
+    private String verificationCode;
+
+    private String phoneNumber;
+
     private boolean enabled = false;
+
+    @Column(nullable = false)
+    private String authProvider;  // "GOOGLE" or "LOCAL"
+
+
 }
