@@ -41,4 +41,8 @@ public class Course {
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CourseFolder> courseFolders;
+
+    @ElementCollection
+    @CollectionTable(name = "course_learning_points", joinColumns = @JoinColumn(name = "course_id"))
+    private List<LearningPoint> whatYouWillLearn;
 }

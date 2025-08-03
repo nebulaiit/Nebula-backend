@@ -126,6 +126,14 @@ public class TutorialAuthController {
 
     }
 
+    @PostMapping("/user-details/{id}")
+    public ResponseEntity<ResponseBodyDto> updateUserDetails(@PathVariable UUID id,@RequestBody UserProfileUpdate userProfileUpdate){
+        ResponseBodyDto responseBodyDto = tutorialAuthService.updateUserDetails(id,userProfileUpdate);
+
+        return new ResponseEntity<>(responseBodyDto, HttpStatus.OK);
+
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ResponseBodyDto> deleteUser(@PathVariable UUID id){
 

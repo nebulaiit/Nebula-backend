@@ -2,6 +2,7 @@ package com.nebula.Nebula.course.controller;
 
 import com.nebula.Nebula.auth.dto.ResponseBodyDto;
 import com.nebula.Nebula.course.dto.CourseContentDto;
+import com.nebula.Nebula.course.dto.CourseDetailsDto;
 import com.nebula.Nebula.course.dto.CourseDto;
 import com.nebula.Nebula.course.model.Course;
 import com.nebula.Nebula.course.service.CourseService;
@@ -48,9 +49,9 @@ public class CourseController {
 
 
     @GetMapping("/courses/{id}")
-    public ResponseEntity<Course> getCourseById(@PathVariable UUID id){
+    public ResponseEntity<CourseDetailsDto> getCourseById(@PathVariable UUID id){
 
-        Course course = courseService.getCourseById(id);
+        CourseDetailsDto course = courseService.getCourseById(id);
 
         return new ResponseEntity<>(course, HttpStatus.OK);
 

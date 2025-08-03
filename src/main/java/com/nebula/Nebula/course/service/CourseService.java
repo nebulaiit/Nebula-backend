@@ -2,6 +2,7 @@ package com.nebula.Nebula.course.service;
 
 import com.nebula.Nebula.auth.dto.ResponseBodyDto;
 import com.nebula.Nebula.course.dto.CourseContentDto;
+import com.nebula.Nebula.course.dto.CourseDetailsDto;
 import com.nebula.Nebula.course.dto.CourseDto;
 import com.nebula.Nebula.course.mapper.CourseMapper;
 import com.nebula.Nebula.course.model.Course;
@@ -54,6 +55,16 @@ public class CourseService {
                     }
                 }
             }
+
+            // ✅ Validate and clean up whatYouWillLearn list if necessary
+            if (course.getWhatYouWillLearn() != null) {
+                course.setWhatYouWillLearn(
+                        course.getWhatYouWillLearn()
+                                .stream()
+                                .filter(lp -> lp.getTitle() != null && lp.getDescription() != null)
+                                .toList()
+                );
+            }
             courseRepo.save(course);
             return ResponseBodyDto.builder().code(201).message("Course Has Been Added").build();
 
@@ -62,9 +73,12 @@ public class CourseService {
         return ResponseBodyDto.builder().code(401).message("Course Already Present").build();
     }
 
-    public Course getCourseById(UUID id) {
+    public CourseDetailsDto getCourseById(UUID id) {
 
-        return courseRepo.findById(id).orElse(null);
+        Course course = courseRepo.findById(id).orElse(null);
+
+        assert course != null;
+        return courseMapper.mapToCourseDetailsDto(course);
     }
 
     public ResponseBodyDto deleteCourseById(UUID id) {

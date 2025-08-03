@@ -32,6 +32,11 @@ public class LearnerUser {
 
     private String verificationCode;
 
+    private String headline;
+
+    private String bio;
+
+
     private String phoneNumber;
 
     private boolean enabled = false;

@@ -6,13 +6,10 @@ import com.nebula.Nebula.auth.entity.LearnerUser;
 import com.nebula.Nebula.auth.helper.VerificationCode;
 import com.nebula.Nebula.auth.repo.LearnerUserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -114,5 +111,30 @@ public class TutorialAuthService {
         learnerUserRepo.save(user);
     }
 
+    public ResponseBodyDto updateUserDetails(UUID id, UserProfileUpdate userProfileUpdate) {
 
+        LearnerUser user = learnerUserRepo.findById(id).orElse(null);
+
+        if (user == null) {
+            return ResponseBodyDto.builder()
+                    .code(401)
+                    .message("User not found")
+                    .build();
+        }
+
+        user.setFirstName(userProfileUpdate.getFirstName());
+        user.setLastName(userProfileUpdate.getLastName());
+        user.setEmail(userProfileUpdate.getEmail());
+        user.setHeadline(userProfileUpdate.getHeadline());
+        user.setBio(userProfileUpdate.getBio());
+        user.setPhoneNumber(userProfileUpdate.getPhoneNumber());
+
+        learnerUserRepo.save(user);
+
+        return ResponseBodyDto.builder()
+                .code(201)
+                .message("User profile updated successfully")
+                .build();
+
+    }
 }
