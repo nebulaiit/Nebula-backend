@@ -7,7 +7,7 @@ import java.io.IOException;
 @Service
 public class OllamaService {
 
-    private static final String OLLAMA_URL = "http://localhost:11434/api/generate";
+    private static final String OLLAMA_URL = "http://168.231.116.33:11434/api/generate";
     private static final MediaType JSON = MediaType.parse("application/json");
 
     private final OkHttpClient client = new OkHttpClient();
