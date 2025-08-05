@@ -1,5 +1,6 @@
 package com.nebula.Nebula.Jobs.model;
 
+import com.nebula.Nebula.auth.entity.Users;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,6 +38,10 @@ public class JobVacancy {
     @CollectionTable(name = "job_required_skills", joinColumns = @JoinColumn(name = "job_id"))
     @Column(name = "skill")
     private List<String> requiredSkills;
+
+    @ManyToOne
+    @JoinColumn(name = "posted_by_user_id")
+    private Users postedBy;
 
     private String education; // "B.Tech, B.E, MCA"
 

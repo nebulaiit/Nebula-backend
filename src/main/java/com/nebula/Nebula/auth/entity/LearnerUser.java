@@ -36,7 +36,6 @@ public class LearnerUser {
 
     private String bio;
 
-
     private String phoneNumber;
 
     private boolean enabled = false;
