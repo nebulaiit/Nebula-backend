@@ -2,10 +2,15 @@ package com.nebula.Nebula.Jobs.service;
 
 import com.nebula.Nebula.Jobs.dto.JobDetailsDto;
 import com.nebula.Nebula.Jobs.dto.JobVacancyDto;
+import com.nebula.Nebula.Jobs.dto.JobVacancyRequestDto;
 import com.nebula.Nebula.Jobs.mapper.JobVacancyMapper;
+import com.nebula.Nebula.Jobs.model.Company;
 import com.nebula.Nebula.Jobs.model.JobVacancy;
+import com.nebula.Nebula.Jobs.repo.CompanyRepo;
 import com.nebula.Nebula.Jobs.repo.JobRepo;
 import com.nebula.Nebula.auth.dto.ResponseBodyDto;
+import com.nebula.Nebula.auth.entity.Users;
+import com.nebula.Nebula.auth.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +26,13 @@ public class JobService {
     private JobRepo jobRepo;
 
     @Autowired
+    private CompanyRepo companyRepo;
+
+    @Autowired
+    private UserRepo userRepo;
+
+
+    @Autowired
     private JobVacancyMapper jobVacancyMapper;
     
     public List<JobVacancyDto> getAllJobs() {
@@ -30,10 +42,15 @@ public class JobService {
                 .collect(Collectors.toList());
     }
 
-    public ResponseBodyDto createJobs(JobVacancy job) {
+    public ResponseBodyDto createJobs(JobVacancyRequestDto job) {
 
-        // Check for duplicate job by title + company name
-        JobVacancy existingJob = jobRepo.findByJobTitleAndCompanyName(job.getJobTitle(), job.getCompanyName());
+        String companyName = job.getCompany().getName();
+
+        UUID companyId = job.getCompany().getId();
+
+        UUID userId =  job.getPostedBy().getId();
+
+        JobVacancy existingJob = jobRepo.findByJobTitleAndCompanyName(job.getJobTitle(), companyName);
 
         if (existingJob != null) {
             return ResponseBodyDto.builder()
@@ -42,11 +59,15 @@ public class JobService {
                     .build();
         }
 
+        Company company = companyRepo.findById(companyId).orElse(null);
+
+
+        Users user = userRepo.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Map DTO to Entity
         JobVacancy jobToSave = JobVacancy.builder()
                 .jobTitle(job.getJobTitle())
-                .companyName(job.getCompanyName())
-                .companyLogoUrl(job.getCompanyLogoUrl())
-                .location(job.getLocation())
                 .jobType(job.getJobType())
                 .experience(job.getExperience())
                 .salaryRange(job.getSalaryRange())
@@ -56,13 +77,12 @@ public class JobService {
                 .responsibilities(job.getResponsibilities())
                 .qualifications(job.getQualifications())
                 .benefits(job.getBenefits())
-                .contactEmail(job.getContactEmail())
-                .contactPhone(job.getContactPhone())
-                .applyUrl(job.getApplyUrl())
                 .isRemote(job.isRemote())
                 .isActive(true)
                 .postedDate(LocalDate.now())
                 .lastDateToApply(job.getLastDateToApply())
+                .company(company)
+                .postedBy(user)
                 .build();
 
         jobRepo.save(jobToSave);
@@ -72,8 +92,6 @@ public class JobService {
                 .message("Job vacancy created successfully.")
                 .build();
     }
-
-
 
     public JobDetailsDto getJobDetailsById(UUID id) {
 

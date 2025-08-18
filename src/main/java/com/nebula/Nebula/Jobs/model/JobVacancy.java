@@ -1,5 +1,6 @@
 package com.nebula.Nebula.Jobs.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nebula.Nebula.auth.entity.Users;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,12 +23,6 @@ public class JobVacancy {
 
     private String jobTitle;
 
-    private String companyName;
-
-    private String companyLogoUrl;
-
-    private String location;
-
     private String jobType; // Full-time, Part-time, Internship, Contract, Remote
 
     private String experience; // "Fresher", "2-5 years", etc.
@@ -40,7 +35,13 @@ public class JobVacancy {
     private List<String> requiredSkills;
 
     @ManyToOne
+    @JoinColumn(name = "company_id")
+    @JsonIgnore
+    private Company company;
+
+    @ManyToOne
     @JoinColumn(name = "posted_by_user_id")
+    @JsonIgnore
     private Users postedBy;
 
     private String education; // "B.Tech, B.E, MCA"
@@ -48,20 +49,20 @@ public class JobVacancy {
     @Column(length = 5000)
     private String jobDescription;
 
-    @Column(length = 3000)
-    private String responsibilities;
+    @ElementCollection
+    @CollectionTable(name = "job_responsibilities", joinColumns = @JoinColumn(name = "job_id"))
+    @Column(name = "responsibility")
+    private List<String> responsibilities;
 
-    @Column(length = 3000)
-    private String qualifications;
+    @ElementCollection
+    @CollectionTable(name = "job_qualifications", joinColumns = @JoinColumn(name = "job_id"))
+    @Column(name = "qualification")
+    private List<String> qualifications;
 
-    @Column(length = 2000)
-    private String benefits;
-
-    private String contactEmail;
-
-    private String contactPhone;
-
-    private String applyUrl;
+    @ElementCollection
+    @CollectionTable(name = "job_benefits", joinColumns = @JoinColumn(name = "job_id"))
+    @Column(name = "benefit")
+    private List<String> benefits;
 
     private boolean isRemote;
 

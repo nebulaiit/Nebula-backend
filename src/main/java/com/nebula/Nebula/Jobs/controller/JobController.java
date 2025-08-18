@@ -2,6 +2,7 @@ package com.nebula.Nebula.Jobs.controller;
 
 import com.nebula.Nebula.Jobs.dto.JobDetailsDto;
 import com.nebula.Nebula.Jobs.dto.JobVacancyDto;
+import com.nebula.Nebula.Jobs.dto.JobVacancyRequestDto;
 import com.nebula.Nebula.Jobs.model.JobVacancy;
 import com.nebula.Nebula.Jobs.service.JobService;
 import com.nebula.Nebula.auth.dto.ResponseBodyDto;
@@ -28,7 +29,7 @@ public class JobController {
         return new ResponseEntity<>(jobs, HttpStatus.OK);
     }
     @PostMapping("/add-vacancy")
-    public ResponseEntity<ResponseBodyDto> createJob(@RequestBody JobVacancy job) {
+    public ResponseEntity<ResponseBodyDto> createJob(@RequestBody JobVacancyRequestDto job) {
 
        ResponseBodyDto responseBodyDto = jobService.createJobs(job);
 
