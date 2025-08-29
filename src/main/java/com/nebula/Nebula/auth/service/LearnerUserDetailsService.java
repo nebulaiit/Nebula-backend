@@ -15,16 +15,14 @@ public class LearnerUserDetailsService implements UserDetailsService {
     @Autowired
     private LearnerUserRepo learnerUserRepo;
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        LearnerUser user = learnerUserRepo.findByEmail(username);
+        LearnerUser learnerUser = learnerUserRepo.findByEmail(username);
 
-        return User.builder()
-                .username(user.getEmail())
-                .password(user.getPassword())
-                .disabled(!user.isEnabled())
-                .roles("TUTORIAL_USER") // You can treat this as a simple identifier
-                .build();
+        if(learnerUser == null){
+            throw new UsernameNotFoundException("User not Found"+ username);
+
+        }
+        return learnerUser;
     }
 }

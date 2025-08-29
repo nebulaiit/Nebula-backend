@@ -98,7 +98,6 @@ public class TutorialAuthController {
 
         LearnerUser user = (LearnerUser) userDetailsService.loadUserByUsername(userName);
 
-        System.out.println("Verification Code : "+user.getVerificationCode());
 
         if (null != user && user.getVerificationCode().equals(code)){
             tutorialAuthService.verifyUser(userName);
