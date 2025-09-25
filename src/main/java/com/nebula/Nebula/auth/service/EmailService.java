@@ -25,9 +25,10 @@ public class EmailService {
 
         String subject = "Verify your Email";
         String senderName = "QubitronX Learning";
-        String mailContent = "Hello " + user.getFirstName() + user.getLastName() +  ",\n";
+        String mailContent = "Hello " + user.getFirstName() +" "+ user.getLastName() +  ",\n";
         mailContent += "Your verification code is: " + user.getVerificationCode() + "\n";
         mailContent += "Please enter this code to verify your email.";
+        mailContent +="\n";
         mailContent +="\n";
         mailContent+= senderName;
 
